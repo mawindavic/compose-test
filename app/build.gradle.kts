@@ -64,6 +64,9 @@ dependencies {
     //serialisation
     implementation(libs.kotlin.serialzation)
 
+    //navigation
+    implementation(libs.bundles.navigation.all)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
