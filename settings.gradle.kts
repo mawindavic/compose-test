@@ -21,4 +21,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "Compose Code Test"
 include(":app")
- 
+include(":remote")
+include(":local")
+include(":domain")
