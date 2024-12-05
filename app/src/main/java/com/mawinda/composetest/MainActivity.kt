@@ -21,6 +21,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             ComposeCodeTestTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                    //TODO: Change to login screen
                     Greeting(
                         name = "Android",
                         modifier = Modifier.padding(innerPadding)
