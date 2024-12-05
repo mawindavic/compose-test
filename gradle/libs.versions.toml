@@ -17,6 +17,8 @@ kotlin-serialization = "1.6.3"
 
 navigationCompose = "2.8.4"
 hiltNavigationCompose = "1.2.0"
+room = "2.6.1"
+sqlCipher = "4.5.3"
 
 
 [libraries]
@@ -44,6 +46,13 @@ kotlin-serialzation = { module = "org.jetbrains.kotlinx:kotlinx-serialization-js
 androidx-lifecycle-process = { module = "androidx.lifecycle:lifecycle-process", version.ref = "lifecycleRuntimeKtx" }
 androidx-lifecycle-viewmodel-compose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "lifecycleRuntimeKtx" }
 
+#Room
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
+room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
+room-cipher = { module = "net.zetetic:android-database-sqlcipher", version.ref = "sqlCipher" }
+
 
 #Navigation
 androidx-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
@@ -59,5 +68,6 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 kotlinSerialisation = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
 [bundles]
-navigation-all = ["androidx-navigation-compose","hilt-android-navigation-compose"]
+navigation-all = ["androidx-navigation-compose", "hilt-android-navigation-compose"]
+room-database = ["room-cipher", "room-ktx", "room-paging", "room-runtime"]
 

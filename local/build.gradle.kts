@@ -52,6 +52,11 @@ dependencies {
     //serialisation
     implementation(libs.kotlin.serialzation)
 
+
+    //room
+    implementation(libs.bundles.room.database)
+    ksp(libs.room.compiler)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
