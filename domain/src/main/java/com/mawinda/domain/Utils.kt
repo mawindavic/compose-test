@@ -23,3 +23,27 @@ fun generateUserTimeBasedGreetings(
         false -> "$greeting, $username!"
     }
 }
+
+
+/**
+ * Validates the username.
+ */
+fun String.isValidUsername(): Pair<Boolean, String> {
+    return when (this.isBlank()) {
+        true -> false to "Username cannot be empty"
+        false -> true to ""
+    }
+}
+
+
+/**
+ * Validates the password.
+ */
+fun String.isValidPassword(): Pair<Boolean, String> {
+    return when (this.isBlank()) {
+        true -> false to "Password cannot be empty"
+        false -> true to ""
+    }
+}
+
+
