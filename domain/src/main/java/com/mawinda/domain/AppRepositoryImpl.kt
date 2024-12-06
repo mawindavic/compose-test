@@ -11,4 +11,7 @@ class AppRepositoryImpl @Inject constructor(
     override suspend fun login(username: String, password: String) {
         TODO("Implement login action")
     }
+
+    override suspend fun greetUser(username: String): String =
+        generateUserTimeBasedGreetings(username = username)
 }

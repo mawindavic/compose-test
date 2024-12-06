@@ -1,4 +1,4 @@
-package com.mawinda.composetest.ui.model
+package com.mawinda.domain.model
 
 enum class Screen {
     LOGIN, HOME, DETAIL

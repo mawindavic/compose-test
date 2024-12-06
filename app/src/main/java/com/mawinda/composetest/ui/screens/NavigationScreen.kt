@@ -9,7 +9,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.mawinda.composetest.ui.model.Screen
+import com.mawinda.domain.model.Screen
 
 @Composable
 fun NavigationScreen(
@@ -24,11 +24,9 @@ fun NavigationScreen(
         ) {
 
             composable(Screen.LOGIN.name) {
-                LoginScreen(
-                    onLoginSuccess = {
-                        navController.navigate(Screen.HOME.name)
-                    }
-                )
+                LoginScreen(onLoginSuccess = {
+                    navController.navigate(Screen.HOME.name)
+                })
             }
 
             composable(Screen.HOME.name) {

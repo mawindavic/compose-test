@@ -12,9 +12,11 @@ class ComposeTestApp : Application() {
         enableLogging()
     }
 
+    /**
+     * Enable logging for debug builds using timber.
+     */
     private fun enableLogging() {
         if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
     }
-
 
 }
