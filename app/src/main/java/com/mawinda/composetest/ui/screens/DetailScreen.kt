@@ -6,16 +6,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 
 @Composable
 fun DetailScreen(
     modifier: Modifier = Modifier,
-    viewModel: MainViewModel = hiltViewModel(),
+    viewModel: MainViewModel,
     onBackPressed: () -> Unit
 ) {
+    val selectedMed = viewModel.selectedMed.collectAsState()
+
     BackHandler {
         onBackPressed()
     }
@@ -24,7 +26,9 @@ fun DetailScreen(
             .padding(16.dp),
         verticalArrangement = Arrangement.Top,
     ) {
-        Text(text = "Detail Content")
+        selectedMed.value?.let {
+            Text(text = it.name)
+        }
     }
 
 }

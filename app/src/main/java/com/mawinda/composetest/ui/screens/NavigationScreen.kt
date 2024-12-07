@@ -6,6 +6,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,16 +16,16 @@ import com.mawinda.domain.model.Screen
 
 @Composable
 fun NavigationScreen(
-    modifier: Modifier = Modifier, navController: NavHostController = rememberNavController()
+    modifier: Modifier = Modifier,
+    navController: NavHostController = rememberNavController(),
+    viewModel: MainViewModel = hiltViewModel()
 ) {
     val currentBackStack by navController.currentBackStackEntryAsState()
-    Scaffold(
-        topBar = {
-            if (currentBackStack?.destination?.route == Screen.DETAIL.name) {
-                AppBar()
-            }
+    Scaffold(topBar = {
+        if (currentBackStack?.destination?.route == Screen.DETAIL.name) {
+            AppBar()
         }
-    ) { paddingValues ->
+    }) { paddingValues ->
         NavHost(
             navController = navController,
             startDestination = Screen.LOGIN.name,
@@ -39,7 +40,8 @@ fun NavigationScreen(
             }
 
             composable(Screen.HOME.name) {
-                HomeScreen(onNavigateToDetail = {
+
+                HomeScreen(viewModel = viewModel, onNavigateToDetail = {
                     navController.navigate(Screen.DETAIL.name)
                 }, onLogout = {
                     navController.popBackStack(Screen.LOGIN.name, inclusive = false)
@@ -47,7 +49,7 @@ fun NavigationScreen(
             }
 
             composable(Screen.DETAIL.name) {
-                DetailScreen(onBackPressed = {
+                DetailScreen(viewModel = viewModel, onBackPressed = {
                     navController.popBackStack()
                 })
             }
