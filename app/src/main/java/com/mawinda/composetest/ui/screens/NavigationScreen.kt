@@ -4,10 +4,12 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.mawinda.domain.model.Screen
 
@@ -15,14 +17,21 @@ import com.mawinda.domain.model.Screen
 fun NavigationScreen(
     modifier: Modifier = Modifier, navController: NavHostController = rememberNavController()
 ) {
-
-    Scaffold(modifier = modifier.fillMaxSize()) { innerPadding ->
+    val currentBackStack by navController.currentBackStackEntryAsState()
+    Scaffold(
+        topBar = {
+            if (currentBackStack?.destination?.route == Screen.DETAIL.name) {
+                AppBar()
+            }
+        }
+    ) { paddingValues ->
         NavHost(
             navController = navController,
             startDestination = Screen.LOGIN.name,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier
+                .padding(paddingValues)
+                .fillMaxSize()
         ) {
-
             composable(Screen.LOGIN.name) {
                 LoginScreen(onLoginSuccess = {
                     navController.navigate(Screen.HOME.name)
@@ -44,6 +53,5 @@ fun NavigationScreen(
             }
         }
     }
-
 
 }

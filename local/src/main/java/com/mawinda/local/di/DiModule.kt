@@ -31,4 +31,9 @@ object Module {
         Room.databaseBuilder(context, MyDatabase::class.java, "my_database")
             .addMigrations(*RoomMigration.MIGRATIONS).fallbackToDestructiveMigration().build()
 
+
+    @Provides
+    @Singleton
+    fun provideProfileDao(database: MyDatabase) = database.profileDao()
+
 }

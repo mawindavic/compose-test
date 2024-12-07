@@ -9,12 +9,12 @@ import java.util.Locale
  * @param username The user's name.
  */
 fun generateUserTimeBasedGreetings(
-    username: String,
+    username: String = "",
     hourOfDay: Int = Calendar.getInstance(Locale.getDefault())[Calendar.HOUR_OF_DAY]
 ): String {
     val greeting = when (hourOfDay) {
         in 0..11 -> "Good Morning"
-        in 12..16 -> "Good Afternoon"
+        in 12..15 -> "Good Afternoon"
         else -> "Good Evening"
     }
 
