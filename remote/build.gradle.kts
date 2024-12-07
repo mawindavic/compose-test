@@ -39,8 +39,6 @@ android {
 dependencies {
 
     implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
 
     //hilt
     implementation(libs.hilt.android)
@@ -51,6 +49,12 @@ dependencies {
 
     //serialisation
     implementation(libs.kotlin.serialzation)
+
+    //ktor
+    implementation(platform(libs.ktor.bom))
+    implementation(libs.bundles.ktor)
+
+    implementation(kotlin("reflect"))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

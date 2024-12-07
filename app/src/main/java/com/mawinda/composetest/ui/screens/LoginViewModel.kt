@@ -90,12 +90,14 @@ class LoginViewModel @Inject constructor(private val appRepository: AppRepositor
         //Request login
         _uiState.value = UiState.Loading
 
-        val result = appRepository.login(userName, password)
+        appRepository.login(userName, password)
+            .onSuccess {
+                _uiState.value = UiState.Success(it)
 
-        _uiState.value = when (result.isSuccess) {
-            true -> UiState.Success(result.getOrNull())
-            false -> UiState.Error(result.exceptionOrNull()?.message ?: "Unknown error")
-        }
+            }.onFailure {
+                _uiState.value = UiState.Error(it.message ?: "Unknown error")
+            }
+
     }
 
 

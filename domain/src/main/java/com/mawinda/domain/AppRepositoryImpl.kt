@@ -1,5 +1,7 @@
 package com.mawinda.domain
 
+import com.mawinda.domain.mappers.toModel
+import com.mawinda.domain.model.Med
 import com.mawinda.local.LocalDataSource
 import com.mawinda.remote.RemoteDataSource
 import kotlinx.coroutines.flow.Flow
@@ -27,5 +29,14 @@ class AppRepositoryImpl @Inject constructor(
     override suspend fun login(username: String, password: String): Result<Boolean> =
         localDataSource.login(username = username, password = password)
 
+    /**
+     * Loads problems from the remote data source.
+     */
+    override suspend fun loadMeds(): Result<List<Med>> = remoteDataSource.loadMeds().map { list ->
+        list.mapIndexed { index, medDTO ->
+            medDTO.toModel(index)
+        }
+    }
 
 }
+
