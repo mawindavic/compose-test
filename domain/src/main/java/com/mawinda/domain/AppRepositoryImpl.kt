@@ -19,7 +19,7 @@ class AppRepositoryImpl @Inject constructor(
     /**
      * Provides the logged-in user's username.
      */
-    override val username: Flow<String> = localDataSource.loggedUser
+    override val username: Flow<String?> = localDataSource.loggedUser
 
 
     /**
@@ -34,6 +34,11 @@ class AppRepositoryImpl @Inject constructor(
      */
     override suspend fun login(username: String, password: String): Result<Boolean> =
         localDataSource.login(username = username, password = password)
+
+    /**
+     * Logs out the currently logged-in user.
+     */
+    override suspend fun logout(): Result<Boolean> = localDataSource.logout()
 
     /**
      * Loads problems from the remote data source.

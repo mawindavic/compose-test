@@ -2,12 +2,15 @@ package com.mawinda.composetest.ui.screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -39,35 +42,73 @@ fun LoginScreen(
 
     val uiState = viewModel.uiState.collectAsState()
 
-    when (val state = uiState.value) {
-        UiState.Idle -> {
-            Timber.i("Idle state")
-        }
-
-        UiState.Loading -> {
-            Timber.i("Loading state")
-            // TODO: Add loading indicator
-        }
-
-        is UiState.Error -> {
-            Timber.i("Error state: ${state.message}")
-            // TODO: Add Snackbar to show error
-        }
-
-        is UiState.Success<*> -> {
-            val data = state.data
-            Timber.d("Success state: $data")
-            if (data is Boolean && data) {
-                onLoginSuccess()
-            }
-            viewModel.clearUserInputs()
-        }
-    }
-
-    Column(
+    Box(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp),
+            .padding(16.dp)
+    ) {
+
+        LoginForm(viewModel)
+
+        when (val state = uiState.value) {
+            UiState.Idle -> {
+                Timber.i("Idle state")
+            }
+
+            UiState.Loading -> {
+                Timber.i("Loading state")
+                LoadingView()
+            }
+
+            is UiState.Error -> {
+                Timber.i("Error state: ${state.message}")
+                ErrorDialog(message = state.message, onDismiss = {
+                    viewModel.clearError()
+                })
+            }
+
+            is UiState.Success<*> -> {
+                val data = state.data
+                Timber.d("Success state: $data")
+                if (data is Boolean && data) {
+                    onLoginSuccess()
+                }
+                viewModel.clearUserInputs()
+            }
+        }
+
+    }
+
+}
+
+
+@Composable
+fun LoadingView(modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        CircularProgressIndicator(
+            modifier = Modifier.width(64.dp),
+            color = MaterialTheme.colorScheme.secondary,
+            trackColor = MaterialTheme.colorScheme.surfaceVariant,
+        )
+
+        Text(
+            text = "Loading...",
+            modifier = Modifier.padding(top = 16.dp),
+            color = MaterialTheme.colorScheme.secondary,
+            style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.Bold
+        )
+    }
+}
+
+@Composable
+private fun LoginForm(viewModel: LoginViewModel, modifier: Modifier = Modifier) {
+    Column(
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
@@ -106,7 +147,10 @@ fun LoginScreen(
                 singleLine = true,
                 supportingText = {
                     if (!viewModel.userNameError.isNullOrEmpty()) {
-                        Text(viewModel.userNameError!!, style = MaterialTheme.typography.labelSmall)
+                        Text(
+                            viewModel.userNameError!!,
+                            style = MaterialTheme.typography.labelSmall
+                        )
                     }
 
                 },
@@ -130,7 +174,10 @@ fun LoginScreen(
                 visualTransformation = if (viewModel.passwordIsVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 supportingText = {
                     if (!viewModel.passwordError.isNullOrEmpty()) {
-                        Text(viewModel.passwordError!!, style = MaterialTheme.typography.labelSmall)
+                        Text(
+                            viewModel.passwordError!!,
+                            style = MaterialTheme.typography.labelSmall
+                        )
                     }
                 },
                 trailingIcon = {
@@ -166,7 +213,6 @@ fun LoginScreen(
 
 
     }
-
 }
 
 

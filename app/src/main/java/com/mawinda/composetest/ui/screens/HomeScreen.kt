@@ -1,9 +1,9 @@
 package com.mawinda.composetest.ui.screens
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,6 +20,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -38,9 +42,18 @@ import java.util.Locale
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: MainViewModel,
-    onLogout: () -> Unit,
-    onNavigateToDetail: () -> Unit
+    onNavigateToDetail: () -> Unit = {},
+    onLogout: () -> Unit = {}
 ) {
+
+    var showLogoutDialog by remember {
+        mutableStateOf(false)
+    }
+
+    BackHandler {
+        showLogoutDialog = true
+    }
+
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -49,21 +62,31 @@ fun HomeScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        Greetings(viewModel, onLogout)
+        Greetings(viewModel)
         Dashboard(viewModel, onNavigateToDetail)
 
+    }
+
+    if (showLogoutDialog) {
+        ConfirmationDialog(message = "You want to logout?", onDismiss = {
+            showLogoutDialog = false
+        }, onConfirm = {
+            showLogoutDialog = false
+            viewModel.logout()
+            onLogout()
+        })
     }
 }
 
 @Composable
 private fun Greetings(
-    viewModel: MainViewModel, onLogout: () -> Unit, modifier: Modifier = Modifier
+    viewModel: MainViewModel, modifier: Modifier = Modifier
 ) {
     val username = viewModel.username.collectAsState()
     val greetings = viewModel.greetings.collectAsState()
 
     ListItem(
-        modifier = modifier.padding(top = 20.dp),
+        modifier = modifier,
         headlineContent = {
             Text(
                 text = greetings.value, style = MaterialTheme.typography.labelLarge,
@@ -73,26 +96,28 @@ private fun Greetings(
             )
         },
         supportingContent = {
-            Text(
-                text = username.value,
-                style = MaterialTheme.typography.displaySmall,
-                maxLines = 1,
-                minLines = 1,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(top = 4.dp)
-            )
+            username.value?.let { name ->
+                Text(
+                    text = name,
+                    style = MaterialTheme.typography.displaySmall,
+                    maxLines = 1,
+                    minLines = 1,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(top = 4.dp)
+                )
+            }
+
         },
         trailingContent = {
-            Image(painter = painterResource(R.drawable.person),
+            Image(
+                painter = painterResource(R.drawable.person),
                 contentDescription = stringResource(R.string.account_image),
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(64.dp)
                     .border(1.dp, color = Color.Gray, shape = CircleShape)
                     .background(color = Color.Gray, shape = CircleShape)
-                    .clickable {
-                        onLogout()
-                    })
+            )
         },
     )
 }
@@ -122,7 +147,7 @@ private fun Dashboard(
 
             UiState.Idle -> Timber.w("Idle")
             UiState.Loading -> item {
-                Text(text = "Loading")
+                LoadingView()
             }
 
             is UiState.Success<*> -> {

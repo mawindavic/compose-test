@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 interface ProfileDao : BaseDao<ProfileEntity> {
 
     @Query("SELECT username FROM profile LIMIT 1")
-    fun loggedUser(): Flow<String>
+    fun loggedUser(): Flow<String?>
 
     @Query("DELETE FROM profile")
     suspend fun deleteAll()

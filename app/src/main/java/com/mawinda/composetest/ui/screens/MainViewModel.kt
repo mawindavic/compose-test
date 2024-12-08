@@ -53,4 +53,8 @@ class MainViewModel @Inject constructor(private val appRepository: AppRepository
     fun selectMed(med: Med?) = viewModelScope.launch {
         _selectedMed.value = med
     }
+
+    fun logout() = viewModelScope.launch {
+        appRepository.logout()
+    }
 }

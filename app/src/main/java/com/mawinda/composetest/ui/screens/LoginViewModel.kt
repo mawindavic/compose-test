@@ -78,12 +78,8 @@ class LoginViewModel @Inject constructor(private val appRepository: AppRepositor
         val (isValidPassword, passError) = password.isValidPassword()
         passwordError = passError
 
-        if (!isValidUsername) {
-            _uiState.value = UiState.Error(nameError)
-            return@launch
-        }
-        if (!isValidPassword) {
-            _uiState.value = UiState.Error(passError)
+        if (!isValidUsername || !isValidPassword) {
+            _uiState.value = UiState.Error("Fix the errors in the form to proceed")
             return@launch
         }
 
@@ -116,5 +112,14 @@ class LoginViewModel @Inject constructor(private val appRepository: AppRepositor
     private fun resetUiState() = viewModelScope.launch {
         if (_uiState.value !is UiState.Idle)
             _uiState.value = UiState.Idle
+    }
+
+    /**
+     * Clears the error messages.
+     */
+    fun clearError() = viewModelScope.launch {
+        userNameError = null
+        passwordError = null
+        resetUiState()
     }
 }

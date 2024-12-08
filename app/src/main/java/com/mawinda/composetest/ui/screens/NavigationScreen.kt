@@ -21,11 +21,20 @@ fun NavigationScreen(
     viewModel: MainViewModel = hiltViewModel()
 ) {
     val currentBackStack by navController.currentBackStackEntryAsState()
-    Scaffold(topBar = {
-        if (currentBackStack?.destination?.route == Screen.DETAIL.name) {
-            AppBar()
-        }
-    }) { paddingValues ->
+    Scaffold(
+        modifier = modifier,
+        topBar = {
+            if (currentBackStack?.destination?.route != Screen.LOGIN.name) {
+                AppBar(
+                    canNavigateBack = currentBackStack?.destination?.route != Screen.HOME.name,
+                    showLogoutButton = currentBackStack?.destination?.route == Screen.HOME.name,
+                    showTitle = currentBackStack?.destination?.route == Screen.DETAIL.name,
+                    onBackPressed = {
+                        navController.popBackStack()
+                    }
+                )
+            }
+        }) { paddingValues ->
         NavHost(
             navController = navController,
             startDestination = Screen.LOGIN.name,
@@ -40,11 +49,11 @@ fun NavigationScreen(
             }
 
             composable(Screen.HOME.name) {
-
                 HomeScreen(viewModel = viewModel, onNavigateToDetail = {
                     navController.navigate(Screen.DETAIL.name)
                 }, onLogout = {
-                    navController.popBackStack(Screen.LOGIN.name, inclusive = false)
+                    viewModel.logout()
+                    navController.navigate(Screen.LOGIN.name)
                 })
             }
 

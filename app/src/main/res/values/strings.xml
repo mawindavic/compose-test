@@ -7,4 +7,7 @@
     <string name="username_placeholder">Enter username</string>
     <string name="password_placeholder">Enter Password</string>
     <string name="account_image">Account Image</string>
+    <string name="medicine_image">medicine image</string>
+    <string name="navigate_up">Go Back</string>
+    <string name="logout">Logout</string>
 </resources>

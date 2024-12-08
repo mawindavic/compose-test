@@ -12,12 +12,26 @@ class LocalDataSourceImpl @Inject constructor(private val profileDao: ProfileDao
     /**
      * Logs in a user with the provided username and password.
      */
-    override suspend fun login(username: String, password: String): Result<Boolean> {
+    override suspend fun login(username: String, password: String): Result<Boolean> = try {
         val profile = ProfileEntity(username = username, password = password)
         profileDao.apply {
             deleteAll()
             insert(profile)
         }
-        return Result.success(true)
+        Result.success(true)
+    } catch (ex: Exception) {
+        ex.printStackTrace()
+        Result.failure(ex)
+    }
+
+    /**
+     * Logs out the currently logged-in user.
+     */
+    override suspend fun logout(): Result<Boolean> = try {
+        profileDao.deleteAll()
+        Result.success(true)
+    } catch (ex: Exception) {
+        ex.printStackTrace()
+        Result.failure(ex)
     }
 }
