@@ -8,11 +8,17 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 
+/**
+ * Implementation of the [AppRepository] interface.
+ */
 class AppRepositoryImpl @Inject constructor(
     private val localDataSource: LocalDataSource, private val remoteDataSource: RemoteDataSource
 ) : AppRepository {
 
 
+    /**
+     * Provides the logged-in user's username.
+     */
     override val username: Flow<String> = localDataSource.loggedUser
 
 

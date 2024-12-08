@@ -12,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.ShapeDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -19,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
@@ -70,21 +72,37 @@ fun LoginScreen(
         verticalArrangement = Arrangement.SpaceEvenly
     ) {
 
-        Column {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
             Image(
+                modifier = Modifier.fillMaxWidth(0.4f),
                 painter = painterResource(R.drawable.ic_launcher_foreground),
                 contentDescription = stringResource(R.string.app_logo)
             )
-            Text(text = "Login Screen")
+            Text(
+                text = stringResource(R.string.app_name),
+                style = MaterialTheme.typography.displayMedium,
+                fontWeight = FontWeight.ExtraBold,
+                color = MaterialTheme.colorScheme.primary
+            )
         }
 
-        Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-            Text("Username")
-
+        Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+            Text(
+                "Username",
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+            )
             OutlinedTextField(
+                shape = ShapeDefaults.Small,
                 value = viewModel.userName,
                 isError = !viewModel.userNameError.isNullOrEmpty(),
                 onValueChange = viewModel::updateUsername,
+                placeholder = {
+                    Text(text = stringResource(R.string.username_placeholder))
+                },
                 singleLine = true,
                 supportingText = {
                     if (!viewModel.userNameError.isNullOrEmpty()) {
@@ -95,13 +113,20 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth()
             )
 
-            Text("Password")
-
+            Text(
+                "Password",
+                style = MaterialTheme.typography.labelLarge,
+                modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)
+            )
             OutlinedTextField(
+                shape = ShapeDefaults.Small,
                 value = viewModel.password,
                 onValueChange = viewModel::updatePassword,
                 isError = !viewModel.passwordError.isNullOrEmpty(),
                 singleLine = true,
+                placeholder = {
+                    Text(text = stringResource(R.string.password_placeholder))
+                },
                 visualTransformation = if (viewModel.passwordIsVisible) VisualTransformation.None else PasswordVisualTransformation(),
                 supportingText = {
                     if (!viewModel.passwordError.isNullOrEmpty()) {
@@ -129,9 +154,11 @@ fun LoginScreen(
                 modifier = Modifier.fillMaxWidth()
             )
             Button(
+                shape = ShapeDefaults.Small,
                 onClick = { viewModel.validateAndLogin() }, modifier = Modifier
+                    .padding(top = 16.dp)
                     .fillMaxWidth()
-                    .height(48.dp)
+                    .height(50.dp)
             ) {
                 Text(text = "Login")
             }

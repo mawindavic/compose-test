@@ -1,6 +1,10 @@
 <resources>
-    <string name="app_name">Compose Code Test</string>
+    <string name="app_name">Medi App</string>
     <string name="app_logo">App logo</string>
     <string name="visibility_off_desc">Password Visibility Off</string>
     <string name="visibility_desc">Password Visibility On</string>
+    <string name="Medicine">Medicine</string>
+    <string name="username_placeholder">Enter username</string>
+    <string name="password_placeholder">Enter Password</string>
+    <string name="account_image">Account Image</string>
 </resources>
